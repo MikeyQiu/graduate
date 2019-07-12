@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高校就业</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="shortcut icon" href="">
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<style>
+body {
+    background-color: #272b30;
+    /*padding: 30px 40px;*/
+    text-align: center;
+    font-family: OpenSans-Light, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Microsoft Jhenghei, sans-serif;
+}
+.texts text {
+    display: none;
+}
+.link1 .active { box-shadow: 0 .5rem .75rem rgba(0, 0, 0, .5); }
+</style>
+{% include "header.html" %}<!--引入网页的header模板-->
+{% include "header1.html" %}<!--引入网页的header模板-->
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-2 column">
+		</div>
+		<div class="col-md-8 column">
+            <div id="container" style="width: 960px;height:500px;margin-top:30px;margin-left: -150px"></div>
+		</div>
+		<div class="col-md-2 column">
+		</div>
+	</div>
+</div>
+<div style="text-align:center;position:relative;">
+
+</div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/themes/dark-unica.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+<script>
+
+$(document).ready(function() {
+
+    $("#link2").addClass("active");
+    $.get('/companyNumber', function(data) {
+        var graduateScale=JSON.parse(data);
+        console.log(graduateScale);
+        var x1 = "";
+        var y = "";
+        var str1 = "";
+        var company = "";
+        //构造data格式[[x1,y1],[x2,y2]...],特别注意的是这里构造完的是字符串
+        for (var i = 0; i < graduateScale.result.length; i++) {
+            console.log(graduateScale.result[i]);
+            x1 = graduateScale.result[i].amount;
+            //构建xAxis中categories['x1','x2','x3'...]
+            company = company + "\"" + graduateScale.result[i].companyName + "\"";
+            if (i < graduateScale.result.length - 1) {
+                x1 = x1 + ",";
+                company = company + ",";
+            }
+            str1 = str1 + x1;
+        }
+        x1="[" + str1 + "]";
+        company="[" + company + "]";
+        console.log(company );
+        y = JSON.parse(company);
+                x1=JSON.parse(x1);
+        console.log(x1);
+            var options={
+                chart: {
+                type: 'column',
+                backgroundColor:"#272b30",
+                style: {
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    color: 'blue'
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    useHTML: true,
+                    layout: 'vertical',
+                    backgroundColor: '#272b30',
+                    align: 'left',
+                    verticalAlign: 'top',
+                    floating: true,
+                    x: 0,
+                    y: -10
+                },
+                plotOptions:{
+                    column: {
+                     stacking: 'normal'
+                  }
+                },
+                exporting:{
+                    enabled:true
+                },
+                title: {
+                    text: '吸纳应届生最多就业单位',
+                     style: {
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                     color:'#FFFFFF'},
+                },
+                subtitle: {
+                    text: '2017年'
+                },
+                xAxis: {
+                    title:{text: '就业单位'},
+                    categories: y,
+                labels: {
+                    rotation: -45  // 设置轴标签旋转角度
+                    }
+                },
+                yAxis: {
+                    title:{text: '人数'},
+                    gridLineDashStyle: 'dash',
+                    },
+
+                    series: [{
+                        name: '应届毕业生就业',
+                        data: x1,
+                        color:'#e7c93a',
+                         dataLabels: {
+                            enabled: true,
+                            color: '#FFFFFF',
+                         }
+                    }],
+
+                    credits: {
+                        enabled: false
+                    },
+
+                };
+            var chart = Highcharts.chart('container', options);
+    });
+});
+</script>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>升学率</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="shortcut icon" href="">
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<style>
+body {
+    background-color: #272b30;
+    text-align: center;
+    font-family: OpenSans-Light, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Microsoft Jhenghei, sans-serif;
+}
+.texts text {
+    display: none;
+}
+
+.texts text:hover {
+    cursor: pointer;
+}
+
+.texts text.inactive {
+    display: none !important;
+}
+</style>
+{% include "header.html" %}<!--引入网页的header模板-->
+{% include "header3.html" %}<!--引入网页的header模板-->
+<!--<h1 style="color:#fff;font-size:32px;margin-bottom:0;margin-top:50px;text-align:left;margin-left:40px;">相关数据统计</h1>-->
+	<div class="row clearfix">
+		<div class="col-md-2 column">
+		</div>
+		<div class="col-md-8 column">
+                <div id="container" style="width: 960px;height:540px;margin-bottom:-40px;margin-top:30px"></div>
+		</div>
+		<div class="col-md-2 column">
+		</div>
+	</div>
+<!--</div>-->
+    <!--&lt;!&ndash;<div id="container" style="width: 960px;height:450px;margin-left:125px;margin-bottom:-40px;margin-top:30px"></div>&ndash;&gt;-->
+    <!--&lt;!&ndash;<svg width="960" height="640" style="margin-left:80px;margin-bottom:-40px;" id="svg1"></svg>&ndash;&gt;-->
+<!--</div>-->
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/themes/dark-unica.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+<script>
+
+$(document).ready(function() {
+    $("#link3").addClass("active");
+    $.get('/graduateNumber', function(data) {
+        var graduateScale=JSON.parse(data);
+        console.log(graduateScale);
+        var gwn = "";
+        var gsa = "";
+        var gsd = "";
+        var gw = "";
+        var gwo = "";
+        var y = "";
+        var x1="";
+        var x2="";
+        var x3="";
+        var x4="";
+        var x5="";
+        var str1 = "";
+        var str2 = "";
+        var str3 = "";
+        var str4 = "";
+        var str5 = "";
+        var under = "";
+        var domestic = "";
+        var abroad = "";
+        var school = "";
+        var array=new Array();
+        //构造data格式[[x1,y1],[x2,y2]...],特别注意的是这里构造完的是字符串
+        for (var i = 0; i < graduateScale.result1.length; i++) {
+            console.log(graduateScale.result1[i]);
+            var temp1= graduateScale.result1[i].graduates;
+            var temp2=graduateScale.result1[i].workRate;
+            gwn=Math.round(temp1*(1-temp2));
+            gsd= graduateScale.result1[i].studyDomestic;
+            gsa= graduateScale.result1[i].studyAbroad;
+            school = school + "\"" + graduateScale.result1[i].schoolName + "\"";
+            var temp4=gwn+Math.round(gsd)+Math.round(gsa);
+            array.push(temp4);
+            console.log(temp4);
+            if (i < graduateScale.result1.length - 1) {
+                gwn = gwn + ",";
+                gsd = gsd + ",";
+                gsa = gsa + ",";
+                school = school + ",";
+            }
+            str1 = str1 + gwn;
+            str2 = str2 + gsd;
+            str3 = str3 + gsa;
+
+        }
+        for (var i = 0; i < graduateScale.result2.length; i++) {
+            console.log(graduateScale.result2[i]);
+            gw=graduateScale.result2[i].goWork;
+            var temp3=graduateScale.result2[i].graduates;
+            console.log(temp3);
+            gwo=temp3-gw-array[i];
+            if (i < graduateScale.result2.length - 1) {
+                gw = gw + ",";
+                gwo = gwo + ",";
+            }
+            str4=str4+gw;
+            str5=str5+gwo;
+        }
+
+        gwn="[" + str1 + "]";
+        gsd="[" + str2+ "]";
+        gsa="[" + str3 + "]";
+        gw="[" + str4+ "]";
+        gwo="[" + str5 + "]";
+        school="[" + school + "]";
+        y = JSON.parse(school);
+        console.log(y);
+
+        x1 = JSON.parse(gwn);
+        x2 = JSON.parse(gwo);
+        x3 = JSON.parse(gw);
+        x4 = JSON.parse(gsa);
+        x5 = JSON.parse(gsd);
+            var options= {
+                chart: {
+                    type: 'area',
+                    backgroundColor: "#272b30",
+                    style: {
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        color: 'blue'
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    useHTML: true,
+                    layout: 'horizontal',
+                    backgroundColor: '#272b30',
+                    align: 'center',
+                    verticalAlign: 'top',
+                    floating: true,
+                    x: 0,
+                    y: -10
+                },
+                plotOptions: {
+                    area: {
+                        stacking: 'percent',
+                        lineColor: '#ffffff',
+                        lineWidth: 1,
+                        marker: {
+                            lineWidth: 1,
+                            lineColor: '#ffffff'
+                        }
+                    }
+                },
+                exporting: {
+                    enabled: true
+                },
+                title: {
+                    text: '高校毕业生去向',
+                    style: {
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        color: '#FFFFFF'
+                    },
+                },
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} 人)<br/>',
+                    shared: true
+                },
+                subtitle: {
+                    text: '2017年'
+                },
+                xAxis: {
+                    title: '高校',
+                    categories: y,
+                    gridLineWidth: 1//设置x轴上的垂线
+                },
+
+                yAxis: {
+                    title: '人数',
+                    gridLineDashStyle: 'dash', //y轴默认gridLineWidth：1，这里设置y轴垂线的样式
+                    labels: {
+                        format: '{value}%'
+                    }
+                },
+                    series: [{
+                        name: '待就业',
+                        data: x1
+                    }, {
+                        name: '灵活就业及其他',
+                        data: x2
+                    }, {
+                        name: '签约就业',
+                        data: x3
+                    }, {
+                        name: '境外升学',
+                        data: x4
+                    }, {
+                        name: '境内升学',
+                        data: x5
+                    }],
+
+                    credits: {
+                        enabled: false
+                    }
+                };
+            var chart = Highcharts.chart('container', options);
+    });
+});
+</script>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>header1</title>
+</head>
+<body>
+<div class="nav-scroller box-shadow">
+    <div id="navbar" class="navbar-collapse" style="margin-left: -200px">
+        <a id="link1" class="nav-link active" href="{{ url_for('work_graph')}}">节点关系图</a>
+        <a id="link2" class="nav-link" href="{{ url_for('get_company')}}">就业单位人数</a>
+        <a id="link3" class="nav-link" href="{{ url_for('get_industry')}}">行业比例分布</a>
+    </div>
+</div>
+</body>
+</html>
+<style>
+.nav-scroller {
+    position: relative;
+    margin-top: 60px;
+    height: 40px;
+    z-index: 2;
+    overflow-y: hidden;
+}
+.nav-scroller .active {
+  font-weight: 700;
+  color: #e7c93a;
+}
+.text-white-50 { color: rgba(255, 255, 255, .5); }
+
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.box-shadow { box-shadow: 0 .5rem .75rem rgba(0, 0, 0, .5); }
+
+.bg-white { color: rgb(255, 255, 255); }
+.nav-link {
+    padding-left: 45px;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1.5rem;
+    color: #e5e5e5;
+}
+#link01 .active,
+#menu li:hover {
+    background-color: #25a69d;
+    /*color: #3cc3ff;*/
+    cursor: pointer;
+}
+</style>
+<script>
+    $("#link01").addClass("active");
+    $(document).ready(function() {
+        $("#navbar a").removeClass("active");
+        // $("#navbar a").toggleClass("active");
+    });
+</script>

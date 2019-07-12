@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高校就业</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="shortcut icon" href="">
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<style>
+body {
+    background-color: #272b30;
+    text-align: center;
+    font-family: OpenSans-Light, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Microsoft Jhenghei, sans-serif;
+}
+.texts text {
+    display: none;
+}
+</style>
+{% include "header.html" %}<!--引入网页的header模板-->
+{% include "header1.html" %}<!--引入网页的header模板-->
+<div style="text-align:center;position:relative;">
+    <div id="container" style="width: 960px;height:640px;margin-left:125px;margin-bottom:-40px;margin-top:30px"></div>
+</div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/themes/dark-unica.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/highcharts-more.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+
+<script>
+
+$(document).ready(function() {
+    $("#link3").addClass("active");
+    $.get('/industryRate', function(data) {
+        var graduateScale=JSON.parse(data);
+        console.log(graduateScale);
+        var x1 = "";
+        var y = "";
+        var str1 = "";
+        var industryName = "";
+        //构造data格式[[x1,y1],[x2,y2]...],特别注意的是这里构造完的是字符串
+        for (var i = 0; i < graduateScale.result.length; i++) {
+            console.log(graduateScale.result[i]);
+            industryName = "\"" + graduateScale.result[i].industryName + "\"";
+            x1 = graduateScale.result[i].industryRate*100;
+            if (i < graduateScale.result.length - 1) {
+                str1=str1+"{"+"\"name\":"+industryName+",\"value\":"+x1+"},";
+                //console.log(str1);
+                // x1 = x1 + ",";
+                // nation = nation + ",";
+            }
+            else{
+                str1 = str1+"{"+"\"name\":"+industryName+",\"value\":"+x1+"}";
+            }
+
+        }
+        x1="[" + str1 + "]";
+                console.log((x1));
+                x1=JSON.parse(x1);
+        console.log((x1));
+        Highcharts.chart('container', {
+            chart: {
+                type: 'packedbubble',
+                backgroundColor:"#272b30",
+                height: '60%'
+            },
+                title: {
+                    text: '就业行业比例',
+                     style: {
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                     color:'#FFFFFF'},
+                },
+                subtitle: {
+                    text: '2017年'
+                },
+            tooltip: {
+                useHTML: true,
+                pointFormat: '<b>{point.name}:</b> {point.y:.2f}<sub>%</sub>'
+            },
+        plotOptions: {
+            packedbubble: {
+                maxSize: '180%',
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}',
+                    filter: {
+                        property: 'y',
+                        operator: '>',
+                        value: 5
+                    },
+                    style: {
+                        color: 'black',
+                        textOutline: 'none',
+                        fontWeight: 'normal'
+                    }
+                },
+                minPointSize:5
+            }
+            },
+            series: [{
+                name: "就业行业",
+                data: x1,
+                color:"#ff8a5b"
+            }],
+            exporting: {
+                enabled:true,
+			chartOptions: {
+				plotOptions: {
+					series: {
+						dataLabels: {
+							enabled: true
+						}
+					}
+				}
+			}
+		},
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 220
+            },
+            chartOptions: {
+                legend: {
+                    align: 'left',
+                    verticalAlign: 'middle',
+                    layout: 'vertical'
+                }
+            }
+        }]
+    }
+});
+
+    });
+});
+</script>
+
+</html>

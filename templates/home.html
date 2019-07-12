@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body>
+{% include "header.html" %}<!--引入网页的header模板-->
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-1 column">
+		</div>
+		<div class="col-md-10 column">
+			<div class="row clearfix">
+				<div class="col-md-4 column">
+					<div class="jumbotron box-shadow" style="background-color:#4eb2d2;margin-top: 120px; ">
+						<h3>
+							就业指标
+						</h3>
+						<p>
+							对不同高校就业数据进行横向比较。
+						</p>
+						<p>
+							 <a class="btn btn-primary btn-large" href="{{ url_for('school_graph')}}">了解更多</a>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-4 column">
+					<div class="jumbotron box-shadow" style="background-color:#ff8a5c;margin-top: 120px;">
+						<h3>
+							工作就业
+						</h3>
+						<p>
+							企事业单位与行业就业情况。
+						</p>
+						<p>
+							 <a class="btn btn-primary btn-large" href="{{ url_for('work_graph')}}">了解更多</a>
+						</p>
+					</div>
+				</div>
+				<div class="col-md-4 column" >
+					<div class="jumbotron box-shadow"style="background-color:#6ca46c;margin-top: 120px;" >
+						<h3>
+							出境升学
+						</h3>
+						<p>
+							出境留学热门国家与高校.
+						</p>
+						<p>
+							 <a class="btn btn-primary btn-large" href="{{ url_for('study_graph')}}">了解更多</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-1 column">
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<style>
+    body {
+    background-color: #272b30;
+    /*padding: 30px 40px;*/
+    text-align: center;
+    font-family: OpenSans-Light, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Microsoft Jhenghei, sans-serif;
+}
+    .box-shadow { box-shadow: 0 .5rem .75rem rgba(0, 0, 0, .5); }
+</style>

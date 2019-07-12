@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毕业生规模</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="shortcut icon" href="">
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<style>
+body {
+    background-color: #272b30;
+    text-align: center;
+    font-family: OpenSans-Light, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Microsoft Jhenghei, sans-serif;
+}
+.texts text {
+    display: none;
+}
+
+.texts text:hover {
+    cursor: pointer;
+}
+
+.texts text.inactive {
+    display: none !important;
+}
+</style>
+{% include "header.html" %}<!--引入网页的header模板-->
+{% include "header3.html" %}<!--引入网页的header模板-->
+<!--<h1 style="color:#fff;font-size:32px;margin-bottom:0;margin-top:50px;text-align:left;margin-left:40px;">相关数据统计</h1>-->
+
+	<div class="row clearfix">
+		<div class="col-md-2 column">
+		</div>
+		<div class="col-md-8 column">
+            <div id="container" style="width: 960px;height:540px;margin-bottom:-40px;margin-top:30px"></div>
+		</div>
+		<div class="col-md-2 column">
+		</div>
+	</div>
+<!--</div>-->
+    <!---->
+    <!--&lt;!&ndash;<svg width="960" height="640" style="margin-left:80px;margin-bottom:-40px;" id="svg1"></svg>&ndash;&gt;-->
+<!--</div>-->
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<!--<script src="https://img.highcharts.com.cn/highcharts/themes/dark-unica.js"></script>-->
+<script src="https://img.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/themes/grid-light.js"></script>
+<script>
+
+$(document).ready(function() {
+    $("#link4").addClass("active");
+    $.get('/localRate', function(data) {
+        var graduateScale=JSON.parse(data);
+        console.log(graduateScale);
+        var x1 = "";
+        var y = "";
+        var str1 = "";
+        var str2 = "";
+        var str3 = "";
+        var workLocalRate = "";
+        var school = "";
+        //构造data格式[[x1,y1],[x2,y2]...],特别注意的是这里构造完的是字符串
+        for (var i = 0; i < graduateScale.result.length; i++) {
+            console.log(graduateScale.result[i]);
+            workLocalRate = graduateScale.result[i].workLocalRate*100;
+            //构建xAxis中categories['x1','x2','x3'...]
+            school = school + "\"" + graduateScale.result[i].regionName + "\"";
+            if (i < graduateScale.result.length - 1) {
+                workLocalRate = workLocalRate + ",";
+                school = school + ",";
+            }
+            str1 = str1 + workLocalRate;
+        }
+        workLocalRate="[" + str1 + "]";
+        school="[" + school + "]";
+        console.log(school);
+        //数据
+        x1 = JSON.parse(workLocalRate);
+        console.log(x1);
+        //坐标
+        y = JSON.parse(school);
+            var options={
+                chart: {
+                type: 'areaspline',
+                backgroundColor:"#272b30",
+                style: {
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    color: 'blue'
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    useHTML: true,
+                    layout: 'vertical',
+                    backgroundColor: '#272b30',
+                    align: 'left',
+                    verticalAlign: 'top',
+                    floating: true,
+                    x: 0,
+                    y: -10
+                },
+                plotOptions: {
+                    areaspline: {
+                        fillOpacity: 0.5
+                    }
+                },
+                exporting:{
+                    enabled:true
+                },
+                title: {
+                    text: '本地就业率',
+                     style: {
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                     color:'#FFFFFF'},
+                },
+                tooltip: {
+                                    pointFormat: '<b>{point.name}</b> {point.y:.2f}<sub>%</sub>',
+                    shared: true
+                },
+                subtitle: {
+                    text: '2017年'
+                },
+                xAxis: {
+                    title:{ text:'城市'},
+                    categories: y,
+                    gridLineWidth: 1//设置x轴上的垂线
+                },
+                yAxis: {
+                    title:{ text:'百分比'},
+                    labels: {
+                        format: '{value}%'
+                    },
+                    gridLineDashStyle: 'dash', //y轴默认gridLineWidth：1，这里设置y轴垂线的样式
+                    //                                labels: {
+                    // step:2//这段代码是设置y轴在原有刻度的前提下每隔两个格显示一下label值，该值小数无效，取整
+                    //                            }
+                    },
+
+                    series: [{
+                        name: '本地就业率',
+                        color:"#4eb2d2",
+                        data: x1
+                    },],
+
+                    credits: {
+                        enabled: false
+                    }
+                };
+            var chart = Highcharts.chart('container', options);
+    });
+});
+</script>
+
+</html>

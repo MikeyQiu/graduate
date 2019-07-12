@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毕业生规模</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="shortcut icon" href="">
+    <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<style>
+body {
+    background-color: #272b30;
+    text-align: center;
+    font-family: OpenSans-Light, PingFang SC, Hiragino Sans GB, Microsoft Yahei, Microsoft Jhenghei, sans-serif;
+}
+.texts text {
+    display: none;
+}
+
+.texts text:hover {
+    cursor: pointer;
+}
+
+.texts text.inactive {
+    display: none !important;
+}
+</style>
+{% include "header.html" %}<!--引入网页的header模板-->
+{% include "header3.html" %}<!--引入网页的header模板-->
+<!--<h1 style="color:#fff;font-size:32px;margin-bottom:0;margin-top:50px;text-align:left;margin-left:40px;">相关数据统计</h1>-->
+<div style="text-align:center;position:absolute;">
+    <div class="container">
+	<div class="row clearfix">
+        		<div class="col-md-2 column">
+		</div>
+		<div class="col-md-8 column">
+            <div id="container" style="width: 960px;height:480px;margin-bottom:-40px;margin-top:30px"></div>
+		</div>
+		<div class="col-md-2 column">
+		</div>
+	</div>
+</div>
+
+    <!--<svg width="960" height="640" style="margin-left:80px;margin-bottom:-40px;" id="svg1"></svg>-->
+</div>
+
+<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts/themes/dark-unica.js"></script>
+<script src="https://img.highcharts.com.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+<!--<script src="https://img.highcharts.com.cn/highcharts/themes/grid-light.js"></script>-->
+<!--<script src="https://img.highcharts.com.cn/highcharts/themes/dark-unica.js"></script>-->
+<script src="https://img.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+<script>
+
+
+
+
+$(document).ready(function() {
+    $("#link2").addClass("active");
+    $.get('/graduateScale', function(data) {
+        var graduateScale=JSON.parse(data);
+        console.log(graduateScale);
+        var x1 = "";
+        var x2 = "";
+        var x3 = "";
+        var y = "";
+        var str1 = "";
+        var str2 = "";
+        var str3 = "";
+        var under = "";
+        var post = "";
+        var doc = "";
+        var school = "";
+        //构造data格式[[x1,y1],[x2,y2]...],特别注意的是这里构造完的是字符串
+        for (var i = 0; i < graduateScale.result.length; i++) {
+            console.log(graduateScale.result[i]);
+            under = graduateScale.result[i].under;
+             post = graduateScale.result[i].post;
+              doc = graduateScale.result[i].doc;
+            //构建xAxis中categories['x1','x2','x3'...]
+            school = school + "\"" + graduateScale.result[i].SchoolName + "\"";
+            if (i < graduateScale.result.length - 1) {
+                under = under + ",";
+                post = post + ",";
+                doc = doc + ",";
+                school = school + ",";
+            }
+            str1 = str1 + under;
+            str2 = str2 + post;
+            str3 = str3 + doc;
+
+        }
+        under="[" + str1 + "]";
+        post="[" + str2+ "]";
+        doc="[" + str3 + "]";
+        school="[" + school + "]";
+        console.log(school);
+        //数据
+        x1 = JSON.parse(under);
+        console.log(x1);
+                x2 = JSON.parse(post);
+        console.log(x2);
+                x3 = JSON.parse(doc);
+        console.log(x3);
+        //坐标
+        y = JSON.parse(school);
+            var options={
+                chart: {
+                type: 'column',
+                backgroundColor:"#272b30",
+                style: {
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    color: 'blue'
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    useHTML: true,
+                    layout: 'horizon',
+                    backgroundColor: '#272b30',
+                    align: 'bottom',
+                    verticalAlign: 'top',
+                    floating: true,
+                    x: 0,
+                    y: -10
+                },
+                plotOptions:{
+                    column: {
+                     stacking: 'normal'
+                  }
+                },
+                exporting:{
+                    enabled:true
+                },
+                title: {
+                    text: '高校毕业生数量',
+                     style: {
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                     color:'#FFFFFF'},
+                },
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:,.0f} 人</b> ({point.percentage:.1f}%)<br/>',
+                    shared: true
+                },
+                subtitle: {
+                    text: '2017年'
+                },
+                xAxis: {
+                    title: '高校',
+                    categories: y,
+                    gridLineWidth: 1//设置x轴上的垂线
+                },
+                yAxis: {
+                    title: '人数',
+                    gridLineDashStyle: 'dash', //y轴默认gridLineWidth：1，这里设置y轴垂线的样式
+                    //                                labels: {
+                    // step:2//这段代码是设置y轴在原有刻度的前提下每隔两个格显示一下label值，该值小数无效，取整
+                    //                            }
+                    },
+
+                    series: [{
+                        name: '博士生',
+        //                color:"#2ca900",
+                        data: x3
+                    }, {
+                        name: '硕士生',
+        //                color:"#589f52",
+                        data: x2
+                    }, {
+                        name: '本科生',
+        //                color:"#6ca46c",
+                        data: x1
+                    },],
+
+                    credits: {
+                        enabled: false
+                    },
+                };
+            var chart = Highcharts.chart('container', options);
+    });
+});
+</script>
+
+</html>

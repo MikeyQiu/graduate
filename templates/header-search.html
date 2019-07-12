@@ -1,0 +1,55 @@
+<nav class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li id="menu_info"></li>
+                <li><a href="{{ url_for('index')}}">首页</a></li>
+                <li>
+                    <div id="search1">
+                    <input type="text" class="form-control" style="margin-left:400px; margin-top: 10px" placeholder="输入感兴趣的内容进行搜索"></div>
+                </li>
+                <li class="dropdown" style="margin-left:200px">
+                  <a id="dropdown-info" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">设置<span class="caret"></span></a>
+                  <ul class="dropdown-menu" id="menu">
+                    <li><a id="link01" href="{{url_for('school_graph')}}" class="active" >就业指标</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a id="link02" href="{{url_for('work_graph')}}">就业工作</a>
+                    <li role="separator" class="divider"></li>
+                    <li><a id="link03" href="{{url_for('study_graph')}}">出境升学</a></li>
+                  </ul>
+                </li>
+            </ul>
+        </div><!-- /.nav-collapse -->
+    </div><!-- /.container -->
+</nav><!-- /.navbar -->
+<style>
+    #search1 input {
+    /*position: absolute;*/
+    /*top: 420px;*/
+    /*left: 60px;*/
+    color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 200px;
+    background-color: #666;
+
+}
+#menu a.active,
+#menu li:hover {
+    background-color: #25a69d;
+    /*color: #3cc3ff;*/
+    cursor: pointer;
+}
+</style>
+<script>
+        $("#menu_info").append("<a>网络节点关系图</a>");
+        $("#menu a").click(function(event) {
+        $("#menu a").removeClass("active");
+        $(this).addClass("active");
+    });
+        $("#menu a").hover(function(event) {
+        $("#menu a").removeClass("active");
+        $(this).addClass("active");
+    });
+</script>

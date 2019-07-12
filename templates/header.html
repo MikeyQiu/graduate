@@ -1,0 +1,113 @@
+<nav class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li id="menu_info"></li>
+                <li><a href="{{ url_for('index')}}">首页</a></li>
+                <!--<li><a href="{{ url_for('get_scale')}}">毕业生就业规模</a></li>-->
+                <!--<li><a href="{{ url_for('get_study')}}">毕业生升学率</a></li>-->
+                <!--<li><a href="{{ url_for('get_industry')}}">就业行业</a></li>-->
+                <!--<li><a href="{{ url_for('get_company')}}">就业企业</a></li>-->
+                <!--<li><a href="{{ url_for('get_nation')}}">出境国家</a></li>-->
+                <!--<li><a href="{{ url_for('get_school')}}">境外高校</a></li>-->
+                <!--<li><a href="{{ url_for('get_local')}}">本地就业率</a></li>-->
+                <li class="dropdown" style="margin-left:750px">
+                  <a id="dropdown-info" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">选择内容<span class="caret"></span></a>
+                  <ul class="dropdown-menu" id="menu">
+                    <li><a id=link01" href="{{url_for('school_graph')}}" class="active" >就业指标</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a id="link02" href="{{url_for('work_graph')}}">就业工作</a>
+                    <li role="separator" class="divider"></li>
+                    <li><a id="link03" href="{{url_for('study_graph')}}">出境升学</a></li></li>
+                  </ul>
+                </li>
+            </ul>
+        </div><!-- /.nav-collapse -->
+    </div><!-- /.container -->
+</nav><!-- /.navbar -->
+<style>
+    * {
+        font-family: "Roboto", sans-serif;
+    }
+    .custom1 {
+        display: block;
+        cursor: pointer;
+    }
+    .off-canvas > .cstm-shade {
+        width: 0;
+        height: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        transition: background 0.5s ease, width 0s ease 0.5s, height 0s ease 0.5s;
+    }
+    .off-canvas > input[type="checkbox"] {
+        display: none;
+    }
+    .off-canvas > input[type="checkbox"]:checked ~ .cstm-shade {
+        background: rgba(0, 0, 0, 0.75);
+        width: 100%;
+        height: 100%;
+        transition: background 0.5s ease;
+    }
+    .off-canvas > .cstm-shade > .cstm-navi {
+        background: white;
+        width: 300px;
+        height: 100%;
+        position: fixed;
+        right: -300px;
+        transition: right 0.5s ease;
+    }
+    .off-canvas > input[type="checkbox"]:checked ~ .cstm-shade > .cstm-navi {
+        right: 0;
+    }
+    .cstm-navi-content {
+        padding: 20px;
+        padding-top: 80px;
+    }
+
+.nav-scroller .nav {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    color: rgba(255, 255, 255, .75);
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.text-white-50 { color: rgba(255, 255, 255, .5); }
+
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.box-shadow { box-shadow: 0 .5rem .75rem rgba(0, 0, 0, .05); }
+.bg-white { color: rgb(255, 255, 255); }
+.nav-link {
+    padding-left: 45px;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1.5rem;
+    color: #e5e5e5;
+}
+#menu a.active,
+#menu li:hover {
+    background-color: #25a69d;
+    /*color: #3cc3ff;*/
+    cursor: pointer;
+}
+</style>
+<script>
+    $("#menu a").click(function(event) {
+        $("#menu a").removeClass("active");
+        $(this).addClass("active");
+    });
+        $("#menu a").hover(function(event) {
+        $("#menu a").removeClass("active");
+        $(this).addClass("active");
+    });
+</script>

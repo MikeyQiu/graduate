@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>header1</title>
+</head>
+<body>
+<div class="nav-scroller box-shadow">
+    <div id="navbar" class="navbar-collapse" style="margin-left: -200px">
+        <a id="link1" class="nav-link active" href="{{ url_for('study_graph')}}">节点关系图</a>
+        <a id="link2" class="nav-link" href="{{ url_for('get_school')}}">升学高校人数</a>
+        <a id="link3" class="nav-link" href="{{ url_for('get_nation')}}">出境国家比例</a>
+        <!--<a class="nav-link" href="#">Suggestions</a>-->
+    </div>
+</div>
+</body>
+</html>
+<style>
+.nav-scroller {
+    position: relative;
+    margin-top: 60px;
+    height: 40px;
+    z-index: 2;
+    overflow-y: hidden;
+}
+.text-white-50 { color: rgba(255, 255, 255, .5); }
+
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.box-shadow { box-shadow: 0 .5rem .75rem rgba(0, 0, 0, .5); }
+.bg-white { color: rgb(255, 255, 255); }
+.nav-link {
+    padding-left: 45px;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1.5rem;
+    color: #e5e5e5;
+}
+.nav-scroller .active {
+  font-weight: 700;
+  color: #0ca44f;
+}
+</style>
+<script>
+    $(document).ready(function() {
+            $("#navbar a").removeClass("active");
+            // $("#navbar a").toggleClass("active");
+    });
+</script>
